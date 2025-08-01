@@ -1,0 +1,32 @@
+# GRABIT Backend - Essential Dependencies Only
+
+# Core framework
+fastapi>=0.104.1
+uvicorn[standard]>=0.24.0
+pydantic>=2.5.0
+
+# YouTube downloading
+pytube>=15.0.0
+yt-dlp>=2023.12.30
+
+# Configuration and environment
+python-dotenv>=1.0.0
+
+# WebSocket support
+websockets>=12.0
+
+# HTTP client for requests
+httpx>=0.25.2
+requests>=2.31.0
+
+# Async support
+asyncio-throttle>=1.0.2
+
+# Process management
+psutil>=5.9.6
+
+# Date/time utilities
+python-dateutil>=2.8.2
+
+# URL parsing
+urllib3>=2.1.0

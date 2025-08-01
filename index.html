@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script type="text/javascript">
+  // This is a CodeSandbox injection script that's used to
+  // add navigation and inspector functionality to the preview
+  (function () {
+    // 1) Get the <script> tag that's currently running:
+    var me = document.currentScript;
+
+    // 2) Create the blocking‐style <script> to load:
+    var script = document.createElement("script");
+    script.src = "https://codesandbox.io/p/preview-protocol.js";
+
+    // By default a dynamically‐inserted <script> is async=true.
+    // Turn async off to make it behave like a normal blocking <script>:
+    script.async = false;
+    // (Do NOT set defer.)
+
+    // 3) Insert it immediately after the current <script>:
+    me.parentNode.insertBefore(script, me);
+  })();
+
+  const isIFramePreview = window.top !== window.self;
+
+  // Only run this script in editor context
+  if (isIFramePreview) {
+    // This script is used to enable Chrome DevTools functionality
+    (function () {
+      var script = document.createElement("script");
+      script.src =
+        "https://codesandbox.io/p/chrome-devtool/protocol/index.js";
+
+      script.onload = () => {
+        const devtoolProtocol = window.chobitsu;
+        if (devtoolProtocol) {
+          window.addEventListener("message", (event) => {
+            const { type, data } = event.data;
+
+            if (type === "FROM_DEVTOOL") {
+              devtoolProtocol.sendRawMessage(data);
+            }
+          });
+
+          devtoolProtocol.setOnMessage((data) => {
+            if (data.includes('"id":"tmp')) {
+              return;
+            }
+
+            window.parent.postMessage({ type: "TO_DEVTOOL", data }, "*");
+          });
+
+          devtoolProtocol.sendRawMessage(
+            `{"id":5,"method":"Runtime.enable","params":{}}`
+          );
+        }        
+      }
+
+      (document.head || document.documentElement).prepend(script);
+    })();
+  }
+
+  if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ === "undefined") {
+    let nextID = 0;
+    let hook = (__REACT_DEVTOOLS_GLOBAL_HOOK__ = {
+      renderers: new Map(),
+      supportsFiber: true,
+      inject: (renderer) => {
+        const id = nextID++;
+        hook.renderers.set(id, renderer);
+        return id;
+      },
+      onScheduleFiberRoot() {},
+      onCommitFiberRoot() {},
+      onCommitFiberUnmount() {},
+    });
+  }
+
+  document.currentScript.remove();
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GRABIT - YouTube Video Downloader | Download YouTube Videos & Playlists Free</title>
+    <meta name="description" content="Free YouTube video downloader powered by GRABIT. Download YouTube videos, playlists, and batch downloads in HD quality. Fast, secure, and easy to use.">
+    <meta name="keywords" content="youtube downloader, video downloader, playlist downloader, youtube to mp4, free video download, GRABIT">
+    <meta name="author" content="GRABIT YouTube Downloader">
+    <meta property="og:title" content="GRABIT - YouTube Video Downloader | Free & Fast">
+    <meta property="og:description" content="Download YouTube videos and playlists for free. High quality downloads with batch support powered by GRABIT backend.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://grabit-downloader.com">
+    <link rel="canonical" href="https://grabit-downloader.com">
+    <link rel="stylesheet" href="grabit-ui.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-play-circle"></i>
+                <span>GRABIT</span>
+            </div>
+            <nav class="nav">
+                <a href="#how-it-works" class="nav-link">How to Download</a>
+                <div class="nav-link-dropdown">
+                    <a href="#try-other-tools" class="nav-link">More tools</a>
+                    <div class="nav-dropdown">
+                        <div class="nav-dropdown-item">Facebook</div>
+                        <div class="nav-dropdown-item">Instagram</div>
+                        <div class="nav-dropdown-item">Twitter</div>
+                        <div class="nav-dropdown-item">More...</div>
+                    </div>
+                </div>
+                <a href="#footer" class="nav-link">Disclaimer</a>
+            </nav>
+            <button class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Warning Section -->
+    <section class="warning-section">
+        <div class="warning-pill">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span>Warning - This platform doesn't support downloading of copyrighted content</span>
+            <div class="warning-tooltip">
+                <strong>Important Notice:</strong><br>
+                This platform strictly prohibits downloading copyrighted content without proper authorization. Use this tool only for educational purposes, personal content, or videos with appropriate licenses. Users are responsible for ensuring compliance with copyright laws and YouTube's terms of service.
+            </div>
+        </div>
+    </section>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">GRABIT - Ultimate YouTube Downloader</h1>
+                <p class="hero-subtitle">Download YouTube videos, playlists and batch download in Full HD, 4K, 8K</p>
+                
+                <!-- Full Width Banner Ad -->
+                <div class="ad-container ad-banner-top ad-above-input">
+                    <div class="ad-placeholder">
+                        <span>Advertisement</span>
+                        <div class="ad-content">Full Width Banner Advertisement</div>
+                    </div>
+                </div>
+
+                <div class="download-section">
+                    <div class="main-tabs">
+                        <button class="main-tab-btn active" data-tab="single">Single Video</button>
+                        <button class="main-tab-btn" data-tab="playlist">Playlist</button>
+                        <button class="main-tab-btn" data-tab="batch">Batch Download</button>
+                    </div>
+
+                    <!-- Single Video Tab -->
+                    <div class="main-tab-content active" id="single-tab">
+                        <div class="input-group">
+                            <input type="text" id="video-url" placeholder="Paste YouTube video URL here..." class="url-input">
+                            <button class="analyze-btn" onclick="analyzeVideo()">
+                                <i class="fas fa-search"></i>
+                                Analyze
+                            </button>
+                        </div>
+
+                        <!-- Video Details Section -->
+                        <div class="video-details" id="video-details">
+                            <div class="video-info">
+                                <div class="video-thumbnail">
+                                    <img id="video-thumb" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIwIiBoZWlnaHQ9IjE4MCIgdmlld0JveD0iMCAwIDMyMCAxODAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMjAiIGhlaWdodD0iMTgwIiBmaWxsPSIjMUExQTFBIi8+Cjx0ZXh0IHg9IjE2MCIgeT0iOTAiIGZpbGw9IiM2NjZFRUEiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkxvYWRpbmcuLi48L3RleHQ+Cjwvc3ZnPgo=" alt="Video Thumbnail">
+                                    <button class="thumbnail-download" onclick="downloadThumbnail()">
+                                        <i class="fas fa-download"></i>
+                                    </button>
+                                </div>
+                                <div class="video-metadata">
+                                    <h3 class="video-title" id="video-title"></h3>
+                                    <div class="video-stats">
+                                        <div class="stat-item">
+                                            <i class="fas fa-calendar"></i>
+                                            <span id="upload-date"></span>
+                                        </div>
+                                        <div class="stat-item">
+                                            <i class="fas fa-eye"></i>
+                                            <span id="view-count"></span>
+                                        </div>
+                                        <div class="stat-item">
+                                            <i class="fas fa-clock"></i>
+                                            <span id="duration"></span>
+                                        </div>
+                                        <div class="stat-item">
+                                            <i class="fas fa-user"></i>
+                                            <span id="channel-name"></span>
+                                        </div>
+                                    </div>
+                                    <div class="description-section">
+                                        <button class="description-toggle" onclick="toggleDescription()">
+                                            <i class="fas fa-chevron-down"></i>
+                                            <span>Show Description</span>
+                                        </button>
+                                        <div class="description-content" id="description-content">
+                                            <button class="copy-description" onclick="copyDescription()">
+                                                <i class="fas fa-copy"></i> Copy
+                                            </button>
+                                            <div class="description-text" id="description-text"></div>
+                                        </div>
+                                    </div>
+                                    <div class="subtitle-section">
+                                        <button class="subtitle-download" id="subtitle-download" onclick="downloadSubtitles()" style="display: none;">
+                                            <i class="fas fa-closed-captioning"></i>
+                                            <span>Download Subtitles</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Format Selection Tabs -->
+                            <div class="format-tabs" id="format-tabs">
+                                <button class="format-tab-btn active" data-format="video">
+                                    <i class="fas fa-video"></i>
+                                    Video
+                                </button>
+                                <button class="format-tab-btn" data-format="audio">
+                                    <i class="fas fa-music"></i>
+                                    Audio
+                                </button>
+                            </div>
+
+                            <!-- Video Formats -->
+                            <div class="format-content active" id="video-formats">
+                                <div class="format-grid" id="video-format-grid">
+                                    <!-- Formats will be populated here by JavaScript -->
+                                </div>
+                            </div>
+
+                            <!-- Audio Formats -->
+                            <div class="format-content" id="audio-formats">
+                                <div class="format-grid" id="audio-format-grid">
+                                    <!-- Audio formats will be populated here by JavaScript -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Playlist Tab -->
+                    <div class="main-tab-content" id="playlist-tab">
+                        <div class="input-group">
+                            <input type="text" id="playlist-url" placeholder="Paste YouTube playlist URL here..." class="url-input">
+                            <button class="analyze-btn" onclick="analyzePlaylist()">
+                                <i class="fas fa-list"></i>
+                                Analyze Playlist
+                            </button>
+                        </div>
+                    
+                        <!-- Playlist Results Section -->
+                        <div class="playlist-results" id="playlist-results">
+                            <div class="playlist-info">
+                                <div class="playlist-header">
+                                    <div class="playlist-details">
+                                        <div class="playlist-found">
+                                            <i class="fas fa-list-ul"></i>
+                                            <span id="playlist-count">Found 0 videos in the playlist</span>
+                                        </div>
+                                        <div class="quality-selection">
+                                            <label for="quality-select" style="color: rgba(255, 255, 255, 0.8); font-weight: 500;">Quality:</label>
+                                            <select class="quality-dropdown" id="quality-select">
+                                                <option value="144p">144p</option>
+                                                <option value="240p">240p</option>
+                                                <option value="360p">360p</option>
+                                                <option value="480p">480p</option>
+                                                <option value="720p" selected>720p</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="playlist-actions">
+                                        <button class="download-btn" id="download-selected" disabled onclick="downloadSelectedPlaylist()">
+                                            <i class="fas fa-download"></i>
+                                            Download Selected
+                                            <span class="selection-badge" id="selection-count" style="display: none;">0</span>
+                                        </button>
+                                        <button class="download-btn" id="download-all" onclick="downloadAllPlaylist()">
+                                            <i class="fas fa-download"></i>
+                                            Download All
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="playlist-videos" id="playlist-videos">
+                                <!-- Playlist videos will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Batch Download Tab -->
+                    <div class="main-tab-content" id="batch-tab">
+                        <div class="batch-input">
+                            <textarea id="batch-urls" placeholder="Paste multiple YouTube URLs (one per line)..." class="batch-textarea"></textarea>
+                            <div class="batch-info">
+                                <button class="analyze-btn" onclick="analyzeBatch()">
+                                    <i class="fas fa-download"></i>
+                                    Analyze All
+                                </button>
+                                <span class="url-count">0 URLs detected</span>
+                            </div>
+                        </div>
+
+                        <!-- Batch Results Section -->
+                        <div class="batch-results" id="batch-results">
+                            <div class="batch-info-header">
+                                <div class="batch-header">
+                                    <div class="batch-details">
+                                        <div class="batch-found">
+                                            <i class="fas fa-list-ul"></i>
+                                            <span id="batch-count">Found 0 videos from batch URLs</span>
+                                        </div>
+                                        <div class="quality-selection">
+                                            <label for="batch-quality-select" style="color: rgba(255, 255, 255, 0.8); font-weight: 500;">Quality:</label>
+                                            <select class="quality-dropdown" id="batch-quality-select">
+                                                <option value="144p">144p</option>
+                                                <option value="240p">240p</option>
+                                                <option value="360p">360p</option>
+                                                <option value="480p">480p</option>
+                                                <option value="720p" selected>720p</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="playlist-actions">
+                                        <button class="download-btn" id="batch-download-selected" disabled onclick="downloadSelectedBatch()">
+                                            <i class="fas fa-download"></i>
+                                            Download Selected
+                                            <span class="selection-badge" id="batch-selection-count" style="display: none;">0</span>
+                                        </button>
+                                        <button class="download-btn" id="batch-download-all" onclick="downloadAllBatch()">
+                                            <i class="fas fa-download"></i>
+                                            Download All
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                            <div class="batch-videos" id="batch-videos">
+                                <!-- Batch videos will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <h3>Processing your request...</h3>
+            <p id="loading-text">Analyzing video...</p>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+            <div class="loading-ad">
+                <div class="ad-placeholder">
+                    <span>Advertisement</span>
+                    <div class="ad-content">320x50 Mobile Banner</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Download Results -->
+    <section class="download-results" id="download-results">
+        <div class="container">
+            <h2>Download Results</h2>
+            <div class="results-grid" id="results-grid">
+                <!-- Results will be populated here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Real-time Progress Panel -->
+    <div class="progress-panel" id="progress-panel">
+        <div class="progress-header">
+            <h3>Downloads in Progress</h3>
+            <button class="progress-close" onclick="hideProgressPanel()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="progress-list" id="progress-list">
+            <!-- Progress items will be populated here -->
+        </div>
+    </div>
+
+    <!-- Try Other Tools Section -->
+    <section id="try-other-tools" class="try-other-tools">
+        <div class="container">
+            <div class="content-with-sidebar">
+                <div class="sidebar-ads">
+                    <div class="ad-container ad-rectangle">
+                        <div class="ad-placeholder">
+                            <span>Advertisement</span>
+                            <div class="ad-content">300x250 Rectangle Ad</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="main-content">
+                    <h2 class="section-title">Try Other Tools</h2>
+                    <div class="tools-grid">
+                        <div class="tool-card" onclick="openToolPopup()">
+                            <div class="tool-card-content">
+                                <h4>Facebook Downloader</h4>
+                                <p>Download Facebook videos easily</p>
+                            </div>
+                            <div class="tool-card-icon">
+                                <i class="fas fa-external-link-alt"></i>
+                            </div>
+                        </div>
+                        <div class="tool-card" onclick="openToolPopup()">
+                            <div class="tool-card-content">
+                                <h4>Instagram Downloader</h4>
+                                <p>Save Instagram posts & stories</p>
+                            </div>
+                            <div class="tool-card-icon">
+                                <i class="fas fa-external-link-alt"></i>
+                            </div>
+                        </div>
+                        <div class="tool-card" onclick="openToolPopup()">
+                            <div class="tool-card-content">
+                                <h4>X.com/Twitter Downloader</h4>
+                                <p>Download Twitter/X videos & GIFs</p>
+                            </div>
+                            <div class="tool-card-icon">
+                                <i class="fas fa-external-link-alt"></i>
+                            </div>
+                        </div>
+                        <div class="tool-card" onclick="openToolPopup()">
+                            <div class="tool-card-content">
+                                <h4>Vimeo Downloader</h4>
+                                <p>Download Vimeo videos in HD</p>
+                            </div>
+                            <div class="tool-card-icon">
+                                <i class="fas fa-external-link-alt"></i>
+                            </div>
+                        </div>
+                        <div class="tool-card" onclick="openToolPopup()">
+                            <div class="tool-card-content">
+                                <h4>Pinterest Downloader</h4>
+                                <p>Save Pinterest images & videos</p>
+                            </div>
+                            <div class="tool-card-icon">
+                                <i class="fas fa-external-link-alt"></i>
+                            </div>
+                        </div>
+                        <div class="tool-card" onclick="openToolPopup()">
+                            <div class="tool-card-content">
+                                <h4>SoundCloud Downloader</h4>
+                                <p>Download SoundCloud tracks</p>
+                            </div>
+                            <div class="tool-card-icon">
+                                <i class="fas fa-external-link-alt"></i>
+                            </div>
+                        </div>
+                        <div class="tool-card" onclick="openToolPopup()">
+                            <div class="tool-card-content">
+                                <h4>Twitch Downloader</h4>
+                                <p>Download Twitch clips & VODs</p>
+                            </div>
+                            <div class="tool-card-icon">
+                                <i class="fas fa-external-link-alt"></i>
+                            </div>
+                        </div>
+                        <div class="tool-card" onclick="openMoreDownloaders()">
+                            <div class="tool-card-content">
+                                <h4>More Downloaders</h4>
+                                <p>Explore all available tools</p>
+                            </div>
+                            <div class="tool-card-icon more-tools-icon">
+                                <i class="fas fa-compass"></i>
+                                <i class="fas fa-search"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- More Downloaders Popup -->
+    <div class="more-downloaders-popup" id="more-downloaders-popup">
+        <div class="popup-content">
+            <div class="popup-header">
+                <h3>More Downloaders</h3>
+                <button class="popup-close" onclick="closeMoreDownloaders()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="popup-search">
+                <input type="text" placeholder="Search downloaders..." class="search-input" onkeyup="searchDownloaders(this.value)">
+            </div>
+            <div class="popup-tools-grid" id="popup-tools-grid">
+                <div class="popup-tool-card">
+                    <h5>TikTok Downloader</h5>
+                    <p>Download TikTok videos without watermark</p>
+                </div>
+                <div class="popup-tool-card">
+                    <h5>LinkedIn Downloader</h5>
+                    <p>Save LinkedIn videos and posts</p>
+                </div>
+                <div class="popup-tool-card">
+                    <h5>Reddit Downloader</h5>
+                    <p>Download Reddit videos and GIFs</p>
+                </div>
+                <div class="popup-tool-card">
+                    <h5>Snapchat Downloader</h5>
+                    <p>Save Snapchat videos and stories</p>
+                </div>
+                <div class="popup-tool-card">
+                    <h5>WhatsApp Downloader</h5>
+                    <p>Download WhatsApp status videos</p>
+                </div>
+                <div class="popup-tool-card">
+                    <h5>Dailymotion Downloader</h5>
+                    <p>Download Dailymotion videos in HD</p>
+                </div>
+                <div class="popup-tool-card">
+                    <h5>Tumblr Downloader</h5>
+                    <p>Save Tumblr videos and GIFs</p>
+                </div>
+                <div class="popup-tool-card">
+                    <h5>Telegram Downloader</h5>
+                    <p>Download Telegram videos and files</p>
+                </div>
+                <div class="popup-tool-card">
+                    <h5>Discord Downloader</h5>
+                    <p>Save Discord videos and attachments</p>
+                </div>
+                <div class="popup-tool-card">
+                    <h5>Spotify Downloader</h5>
+                    <p>Download Spotify tracks and playlists</p>
+                </div>
+            </div>
+            <div class="popup-footer">
+                <p>Try these free downloaders, we are improving and adding more</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="content-with-sidebar">
+                <div class="main-content">
+                    <h2 class="section-title">Features</h2>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-bolt"></i>
+                            </div>
+                            <h3>Lightning Fast</h3>
+                            <p>Download videos with our optimized GRABIT backend and compression algorithms.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-hd-video"></i>
+                            </div>
+                            <h3>HD Quality</h3>
+                            <p>Support for all video qualities from 144p to 8K. Choose the perfect quality for your needs.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <h3>100% Secure</h3>
+                            <p>Your privacy is our priority. No registration required, no data stored, completely anonymous.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-mobile-alt"></i>
+                            </div>
+                            <h3>Mobile Friendly</h3>
+                            <p>Works perfectly on all devices - desktop, tablet, and mobile. Download anywhere, anytime.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-list-ul"></i>
+                            </div>
+                            <h3>Playlist Support</h3>
+                            <p>Download entire playlists with a single click. Batch processing for multiple videos.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-file-audio"></i>
+                            </div>
+                            <h3>Multiple Formats</h3>
+                            <p>Support for MP4, MP3, WebM, and more. Download videos in your preferred format.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="sidebar-ads">
+                    <div class="ad-container ad-rectangle">
+                        <div class="ad-placeholder">
+                            <span>Advertisement</span>
+                            <div class="ad-content">300x250 Rectangle Ad</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Full Width Ad after Features -->
+    <div class="ad-container ad-banner-full-width">
+        <div class="ad-placeholder">
+            <span>Advertisement</span>
+            <div class="ad-content">Full Width Banner Advertisement - 970x90</div>
+        </div>
+    </div>
+
+    <!-- How to download Section -->
+    <section id="how-it-works" class="how-it-works">
+        <div class="container">
+            <h2 class="section-title">How to download</h2>
+            <div class="steps-grid-container">
+                <div class="step step-1" data-step="1">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Copy URL</h3>
+                        <p>Copy the YouTube video, playlist, or multiple URLs from your browser</p>
+                    </div>
+                </div>
+                <div class="step step-2" data-step="2">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Choose Type</h3>
+                        <p>Select Single Video for one video, Playlist for entire playlists, or Batch for multiple URLs</p>
+                    </div>
+                </div>
+                <div class="step step-3" data-step="3">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Analyze</h3>
+                        <p>Click Analyze to process your URLs and view available formats</p>
+                    </div>
+                </div>
+                <div class="step step-4" data-step="4">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Select Format</h3>
+                        <p>Choose between Video or Audio formats with your preferred quality</p>
+                    </div>
+                </div>
+                <div class="step step-5" data-step="5">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <h3>Download/Render</h3>
+                        <p>For ≤720p: Direct download. For >720p: Wait for GRABIT to render and combine streams</p>
+                    </div>
+                </div>
+                <div class="step step-6" data-step="6">
+                    <div class="step-number">6</div>
+                    <div class="step-content">
+                        <h3>Enjoy</h3>
+                        <p>Get your high-quality video files processed by GRABIT backend</p>
+                    </div>
+                </div>
+                
+                <!-- Connecting Lines -->
+                <div class="step-connector connector-1-2"></div>
+                <div class="step-connector connector-2-3"></div>
+                <div class="step-connector connector-3-4"></div>
+                <div class="step-connector connector-4-5"></div>
+                <div class="step-connector connector-5-6"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="faq">
+        <div class="container">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>Is this YouTube downloader free to use?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes, our GRABIT-powered YouTube downloader is completely free to use. You can download unlimited videos without any registration or payment required.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>What video qualities are supported?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>We support all available qualities from 144p to 8K (2160p), including 240p, 360p, 480p, 720p, 1080p, and 4K. The available qualities depend on the original video. GRABIT backend handles quality routing automatically.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>How does the rendering process work?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>For qualities above 720p, YouTube stores video and audio as separate streams. Our GRABIT backend uses FFmpeg to combine these streams into a single high-quality file. You'll see real-time progress updates via WebSocket connection.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>Can I download entire playlists?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes! You can download entire YouTube playlists. GRABIT will analyze all videos in the playlist and allow you to download them individually or in bulk with your chosen quality settings.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>What happens if my batch download fails?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>GRABIT handles errors gracefully. If any video in a batch fails, other videos will continue processing. Failed videos are shown with error details, and you can retry them individually.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>Is it legal to download YouTube videos?</h3>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Downloading videos for personal use is generally acceptable, but you should respect copyright laws and YouTube's terms of service. Only download content you have permission to use.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="footer" class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-play-circle"></i>
+                        <span>GRABIT</span>
+                    </div>
+                    <p>The fastest and most reliable YouTube video downloader powered by advanced GRABIT backend. Download videos, playlists, and audio with ease.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Features</h4>
+                    <ul>
+                        <li><a href="#">Video Downloader</a></li>
+                        <li><a href="#">Playlist Downloader</a></li>
+                        <li><a href="#">Batch Download</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a target="_blank" href="support-legal.html?section=contact">Contact Us</a></li>
+                        <li><a target="_blank" href="support-legal.html?section=bug-report">Report Bug</a></li>
+                        <li><a target="_blank" href="support-legal.html?section=feature-request">Feature Request</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a target="_blank" href="support-legal.html?section=terms">Terms of Service</a></li>
+                        <li><a target="_blank" href="support-legal.html?section=dmca">DMCA</a></li>
+                        <li><a target="_blank" href="support-legal.html?section=disclaimer">Disclaimer</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 GRABIT YouTube Downloader. All rights reserved.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Notification Container -->
+    <div class="notification-container" id="notification-container"></div>
+
+    <script src="grabit-ui.js"></script>
+</body>
+</html>
